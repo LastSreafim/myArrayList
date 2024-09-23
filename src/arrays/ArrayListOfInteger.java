@@ -1,0 +1,158 @@
+package arrays;
+
+
+import java.util.Arrays;
+
+public class ArrayListOfInteger implements IntegerList {
+
+    private Integer[] elements;
+    private int size;
+
+
+
+    public ArrayListOfInteger(int initialCapacity) {
+        if (initialCapacity <= 0) {
+            throw new IllegalArgumentException("Initial capacity must be greater than 0.");
+        }
+        elements = new Integer[initialCapacity];
+        size = 0;
+    }
+
+    private void ensureCapacity() {
+        if (size == elements.length) {
+            elements = Arrays.copyOf(elements, elements.length * 2);
+        }
+    }
+
+    private void checkForNull(Integer item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Null values are not allowed.");
+        }
+    }
+
+
+
+    @Override
+    public Integer add(Integer item) {
+        checkForNull(item);
+        ensureCapacity();
+        elements[size++] = item;
+        return item;
+    }
+
+    @Override
+    public Integer add(int index, Integer item) {
+        checkForNull(item);
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        ensureCapacity();
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+        return item;
+    }
+
+    @Override
+    public Integer set(int index, Integer item) {
+        checkForNull(item);
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        Integer oldValue = elements[index];
+        elements[index] = item;
+        return oldValue;
+    }
+
+    @Override
+    public Integer remove(Integer item) {
+        checkForNull(item);
+        int index = indexOf(item);
+        if (index == -1) {
+            throw new IllegalArgumentException("Element not found: " + item);
+        }
+        return remove(index);
+    }
+
+    @Override
+    public Integer remove(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        Integer removedItem = elements[index];
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        elements[--size] = null;
+        return removedItem;
+    }
+
+    @Override
+    public boolean contains(Integer item) {
+        checkForNull(item);
+        return indexOf(item) != -1;
+    }
+
+    @Override
+    public int indexOf(Integer item) {
+        checkForNull(item);
+        for (int i = 0; i < size; i++) {
+            if (elements[i].equals(item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int lastIndexOf(Integer item) {
+        checkForNull(item);
+        for (int i = size - 1; i >= 0; i--) {
+            if (elements[i].equals(item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public Integer get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return elements[index];
+    }
+
+    @Override
+    public boolean equals(IntegerList otherList) {
+        if (otherList == null) {
+            throw new IllegalArgumentException("Null list is not allowed.");
+        }
+        if (this.size != otherList.size()) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (!this.elements[i].equals(otherList.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void clear() {
+        Arrays.fill(elements, 0, size, null);
+        size = 0;
+    }
+
+    @Override
+    public Integer[] toArray() {
+        return Arrays.copyOf(elements, size);
+    }
+}
