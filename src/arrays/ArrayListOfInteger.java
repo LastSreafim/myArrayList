@@ -9,7 +9,6 @@ public class ArrayListOfInteger implements IntegerList {
     private int size;
 
 
-
     public ArrayListOfInteger(int initialCapacity) {
         if (initialCapacity <= 0) {
             throw new IllegalArgumentException("Initial capacity must be greater than 0.");
@@ -29,7 +28,6 @@ public class ArrayListOfInteger implements IntegerList {
             throw new IllegalArgumentException("Null values are not allowed.");
         }
     }
-
 
 
     @Override
@@ -86,7 +84,8 @@ public class ArrayListOfInteger implements IntegerList {
     @Override
     public boolean contains(Integer item) {
         checkForNull(item);
-        return indexOf(item) != -1;
+        sort(); // Сортируем массив перед бинарным поиском
+        return binarySearch(item) != -1;
     }
 
     @Override
@@ -155,4 +154,48 @@ public class ArrayListOfInteger implements IntegerList {
     public Integer[] toArray() {
         return Arrays.copyOf(elements, size);
     }
+
+    private void swapElements(Integer[] arr, int indexA, int indexB) {
+        int tmp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = tmp;
+    }
+
+    private void selectionSort() {
+        for (int i = 0; i < size - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < size; j++) {
+                if (elements[j] < elements[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            // Swap elements[minIndex] and elements[i]
+            Integer temp = elements[minIndex];
+            elements[minIndex] = elements[i];
+            elements[i] = temp;
+        }
+    }
+
+    private void sort() {
+        selectionSort(); // Вызываем сортировку выбором
+    }
+
+    // Приватный метод бинарного поиска
+    private int binarySearch(Integer item) {
+        int low = 0;
+        int high = size - 1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (elements[mid].equals(item)) {
+                return mid;
+            }
+            if (elements[mid] < item) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
+
 }
