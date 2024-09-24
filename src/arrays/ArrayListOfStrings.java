@@ -43,6 +43,8 @@ public class ArrayListOfStrings implements StringList {
         }
         ensureCapacity();
         System.arraycopy(elements, index, elements, index + 1, size - index);
+        elements[index] = item;
+        size++;
         return item;
     }
 
@@ -52,9 +54,8 @@ public class ArrayListOfStrings implements StringList {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        String oldValue = elements[index];
         elements[index] = item;
-        return oldValue;
+        return item;
     }
 
     @Override
@@ -132,7 +133,7 @@ public class ArrayListOfStrings implements StringList {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override

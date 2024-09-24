@@ -17,9 +17,15 @@ public class ArrayListOfInteger implements IntegerList {
         size = 0;
     }
 
+    private void grow() {
+        // Увеличиваем размер массива на 1.5 раза
+        int newCapacity = (int) (elements.length * 1.5);
+        elements = Arrays.copyOf(elements, newCapacity);
+    }
+
     private void ensureCapacity() {
         if (size == elements.length) {
-            elements = Arrays.copyOf(elements, elements.length * 2);
+            grow();
         }
     }
 
@@ -136,7 +142,7 @@ public class ArrayListOfInteger implements IntegerList {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -161,23 +167,50 @@ public class ArrayListOfInteger implements IntegerList {
         arr[indexB] = tmp;
     }
 
-    private void selectionSort() {
-        for (int i = 0; i < size - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < size; j++) {
-                if (elements[j] < elements[minIndex]) {
-                    minIndex = j;
-                }
-            }
-            // Swap elements[minIndex] and elements[i]
-            Integer temp = elements[minIndex];
-            elements[minIndex] = elements[i];
-            elements[i] = temp;
+//    private void selectionSort() {
+//        for (int i = 0; i < size - 1; i++) {
+//            int minIndex = i;
+//            for (int j = i + 1; j < size; j++) {
+//                if (elements[j] < elements[minIndex]) {
+//                    minIndex = j;
+//                }
+//            }
+//            // Swap elements[minIndex] and elements[i]
+//            Integer temp = elements[minIndex];
+//            elements[minIndex] = elements[i];
+//            elements[i] = temp;
+//        }
+//    }
+
+    public void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
         }
     }
 
+    private int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+
     private void sort() {
-        selectionSort(); // Вызываем сортировку выбором
+//        selectionSort(); // Вызываем сортировку выбором
+        quickSort(elements, 0, elements.length - 1);
+
     }
 
     // Приватный метод бинарного поиска

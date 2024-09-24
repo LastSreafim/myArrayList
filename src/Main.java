@@ -1,11 +1,28 @@
 import arrays.ArrayListOfInteger;
+import arrays.ArrayListOfStrings;
 
 import java.util.Arrays;
 
 public class Main {
-
-
     public static void main(String[] args) {
+
+
+        System.out.println(sumRec(5));
+
+
+        ArrayListOfStrings arrayListOfStrings = new ArrayListOfStrings(10);
+
+        arrayListOfStrings.add("0");
+        arrayListOfStrings.add("1");
+        arrayListOfStrings.add("2");
+        arrayListOfStrings.add("3");
+
+        arrayListOfStrings.add(1, "test");
+        arrayListOfStrings.remove("1");
+        arrayListOfStrings.remove(0);
+        System.out.println(Arrays.toString(arrayListOfStrings.toArray()));
+
+
         int size = 100000;
         Integer[] originalArray = generateRandomArray(size);
 
@@ -27,6 +44,7 @@ public class Main {
         selectionSort(arrayForSelectionSort);
         System.out.println("SelectionSort took: " + (System.currentTimeMillis() - start) + " ms");
     }
+
 
     // Генерация случайного массива
     public static Integer[] generateRandomArray(int size) {
@@ -77,6 +95,22 @@ public class Main {
             }
             arr[j] = temp;
         }
+    }
+
+    public static int sum(int input) {
+        int temp = 0;
+        for (int i = 1; i <= input; i++) {
+            temp += i;
+
+        }
+        return temp;
+    }
+
+    public static int sumRec(int input) {
+        if (input > 0) {
+            return input + sumRec(input - 1);
+        }
+        return 0;
     }
 
 }
